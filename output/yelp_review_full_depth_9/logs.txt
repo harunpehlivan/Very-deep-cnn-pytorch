@@ -1,0 +1,200 @@
+Model's parameters: {'optimizer': 'adam', 'input': 'input/yelp_review_full_csv', 'output': 'output/yelp_review_full_depth_9', 'alphabet': 'abcdefghijklmnopqrstuvwxyz0123456789,;.!?:\'"/\\|_@#$%^&*~`+-=<>()[]{}', 'batch_size': 128, 'dataset': 'yelp_review', 'depth': 9, 'max_length': 1014, 'lr': 0.001, 'shortcut': False, 'num_epochs': 20, 'gpu': True}Epoch: 1/20 
+Training loss: 0.719263076782 Training accuracy: 0.875 
+Test loss: 0.994236115582 Test accuracy: 0.56044 
+Test confusion matrix: 
+[[7535 2105  219   46   95]
+ [2565 5720 1518  130   67]
+ [ 511 3055 4980 1239  215]
+ [ 222  726 2963 4256 1833]
+ [ 373  371  766 2959 5531]]
+
+Epoch: 2/20 
+Training loss: 7.10815597419 Training accuracy: 0.375 
+Test loss: 0.954150696337 Test accuracy: 0.58166 
+Test confusion matrix: 
+[[7898 1788  182   45   87]
+ [2804 5611 1388  136   61]
+ [ 599 2850 5070 1307  174]
+ [ 241  526 2725 4917 1591]
+ [ 317  237  632 3227 5587]]
+
+Epoch: 3/20 
+Training loss: -1 Training accuracy: 0.6875 
+Test loss: 0.91787436912 Test accuracy: 0.59936 
+Test confusion matrix: 
+[[8334 1348  135   48  135]
+ [3265 5097 1314  184  140]
+ [ 739 2431 4583 1816  431]
+ [ 300  388 1727 4805 2780]
+ [ 294  108  268 2181 7149]]
+
+Epoch: 4/20 
+Training loss: 4.82305681985 Training accuracy: 0.625 
+Test loss: 0.944876276673 Test accuracy: 0.58924 
+Test confusion matrix: 
+[[6540 2320  465  151  524]
+ [1503 4710 2862  541  384]
+ [ 244 1046 5301 2691  718]
+ [  62   93 1271 4890 3684]
+ [  88   25  159 1707 8021]]
+
+Epoch: 5/20 
+Training loss: 2.81785846315 Training accuracy: 0.8125 
+Test loss: 0.913975650452 Test accuracy: 0.59438 
+Test confusion matrix: 
+[[5317 4075  384   82  142]
+ [ 795 6657 2263  199   86]
+ [ 110 1954 6229 1539  168]
+ [  53  233 2477 5570 1667]
+ [  78  112  485 3379 5946]]
+
+Epoch: 6/20 
+Training loss: 7.12952946126 Training accuracy: 0.5 
+Test loss: 0.88496835872 Test accuracy: 0.6121 
+Test confusion matrix: 
+[[8315 1281  166   50  188]
+ [3131 4832 1630  202  205]
+ [ 606 1867 5031 1872  624]
+ [ 188  215 1527 4191 3879]
+ [ 202   58  200 1304 8236]]
+
+Epoch: 7/20 
+Training loss: 2.70751900505 Training accuracy: 0.5625 
+Test loss: 0.866697254868 Test accuracy: 0.62156 
+Test confusion matrix: 
+[[7644 2039  191   61   65]
+ [2257 5923 1589  169   62]
+ [ 407 2259 5576 1557  201]
+ [ 166  273 2131 5320 2110]
+ [ 235  129  386 2635 6615]]
+
+Epoch: 8/20 
+Training loss: 6.90391751565 Training accuracy: 0.5625 
+Test loss: 0.882996732408 Test accuracy: 0.62044 
+Test confusion matrix: 
+[[8044 1725  114   26   91]
+ [2571 6015 1226   94   94]
+ [ 566 2620 5165 1330  319]
+ [ 256  412 2113 4470 2749]
+ [ 314  144  361 1853 7328]]
+
+Epoch: 9/20 
+Training loss: 2.70377697889 Training accuracy: 0.5 
+Test loss: 0.869593554969 Test accuracy: 0.62356 
+Test confusion matrix: 
+[[7476 2254  153   39   78]
+ [2008 6432 1379  112   69]
+ [ 361 2569 5427 1453  190]
+ [ 158  414 2162 5288 1978]
+ [ 236  163  421 2625 6555]]
+
+Epoch: 10/20 
+Training loss: 2.54473171476 Training accuracy: 0.75 
+Test loss: 0.864027305508 Test accuracy: 0.622 
+Test confusion matrix: 
+[[7120 2267  249  110  254]
+ [1803 5610 2071  328  188]
+ [ 304 1676 5468 2206  346]
+ [  80  158 1526 5747 2489]
+ [ 115   43  193 2494 7155]]
+
+Epoch: 11/20 
+Training loss: 0.579073230736 Training accuracy: 0.9375 
+Test loss: 0.864442904118 Test accuracy: 0.62442 
+Test confusion matrix: 
+[[7179 2381  277   67   96]
+ [1754 5884 2107  171   84]
+ [ 304 1803 6013 1685  195]
+ [ 114  192 2122 5660 1912]
+ [ 166   82  401 2866 6485]]
+
+Epoch: 12/20 
+Training loss: 2.55775430985 Training accuracy: 0.875 
+Test loss: 0.874686772337 Test accuracy: 0.6183 
+Test confusion matrix: 
+[[6654 2671  356  141  178]
+ [1376 5884 2242  396  102]
+ [ 216 1616 5344 2605  219]
+ [  69  155 1367 6305 2104]
+ [ 108   46  242 2876 6728]]
+
+Epoch: 13/20 
+Training loss: 0.543645335361 Training accuracy: 0.75 
+Test loss: 0.879721239516 Test accuracy: 0.61854 
+Test confusion matrix: 
+[[8080 1609  117   50  144]
+ [2732 5720 1210  186  152]
+ [ 618 2341 4793 1677  571]
+ [ 223  292 1535 4058 3892]
+ [ 237   84  192 1211 8276]]
+
+Epoch: 14/20 
+Training loss: 6.79251645878 Training accuracy: 0.8125 
+Test loss: 0.884438806271 Test accuracy: 0.62236 
+Test confusion matrix: 
+[[7852 1659  247   81  161]
+ [2426 5167 1955  287  165]
+ [ 413 1721 5148 2268  450]
+ [ 141  152 1336 5150 3221]
+ [ 166   56  195 1782 7801]]
+
+Epoch: 15/20 
+Training loss: 0.900269325823 Training accuracy: 0.625 
+Test loss: 0.95834726554 Test accuracy: 0.60432 
+Test confusion matrix: 
+[[8022 1827   90   24   37]
+ [2629 6315  955   63   38]
+ [ 597 3307 4815 1119  162]
+ [ 271  759 2305 4706 1959]
+ [ 443  327  543 2329 6358]]
+
+Epoch: 16/20 
+Training loss: 4.83366182633 Training accuracy: 0.6875 
+Test loss: 0.894374640342 Test accuracy: 0.61976 
+Test confusion matrix: 
+[[8132 1420  248   83  117]
+ [2811 4931 1905  254   99]
+ [ 536 1736 5420 2028  280]
+ [ 172  193 1730 5443 2462]
+ [ 223   65  269 2381 7062]]
+
+Epoch: 17/20 
+Training loss: 2.63759380384 Training accuracy: 0.75 
+Test loss: 0.921677028438 Test accuracy: 0.61094 
+Test confusion matrix: 
+[[7288 2447  146   64   55]
+ [1935 6480 1405  139   41]
+ [ 376 2690 5202 1580  152]
+ [ 152  464 2096 5636 1652]
+ [ 222  219  444 3174 5941]]
+
+Epoch: 18/20 
+Training loss: -1 Training accuracy: 0.625 
+Test loss: 0.915593570077 Test accuracy: 0.61662 
+Test confusion matrix: 
+[[7322 2304  207   70   97]
+ [2025 6242 1464  173   96]
+ [ 350 2560 5146 1652  292]
+ [ 132  368 1916 4983 2601]
+ [ 197  140  346 2179 7138]]
+
+Epoch: 19/20 
+Training loss: -1 Training accuracy: 0.75 
+Test loss: 0.929019069803 Test accuracy: 0.61668 
+Test confusion matrix: 
+[[7227 2107  365  106  195]
+ [1917 5389 2299  256  139]
+ [ 321 1649 5839 1827  364]
+ [ 101  177 1936 5250 2536]
+ [ 129   71  333 2338 7129]]
+
+Epoch: 20/20 
+Training loss: 7.02807647921 Training accuracy: 0.625 
+Test loss: 0.947110821838 Test accuracy: 0.61496 
+Test confusion matrix: 
+[[7764 1755  240   70  171]
+ [2501 5437 1694  221  147]
+ [ 535 2053 5240 1718  454]
+ [ 172  241 1809 4652 3126]
+ [ 201   65  325 1754 7655]]
+
