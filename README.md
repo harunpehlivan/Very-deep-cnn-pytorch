@@ -31,7 +31,7 @@ If you want to train a model with common dataset and default parameters, you cou
 - **python train.py -d dataset_name**: For example, python train.py -d dbpedia
 
 If you want to train a model with common dataset and your preference parameters, like the depth of network, you could run:
-- **python train.py -d dataset_name -t depth**: For example, python train.py -t 9
+- **python train.py -d dataset_name -t depth**: For example, python train.py -d dbpedia -t 9
 
 If you want to train a model with your own dataset, you need to specify the path to input and output folders:
 - **python train.py -i path/to/input/folder -o path/to/output/folder**
