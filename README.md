@@ -48,6 +48,7 @@ Results for test set are presented as follows:  A(B)/C:
 - **A** is accuracy reproduced here.
 - **B** is accuracy reported in the paper.
 - **C** is the epoch when maximum accuracy observed
+
 It should be noted that in experiments with depth is 49 layers, there is no accuracy reported in the paper. Therefore here I only show the results obtained from my experiments.
 
 |     Depth     |        9        |        17       |        29       |        49       |
