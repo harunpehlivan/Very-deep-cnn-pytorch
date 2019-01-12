@@ -44,10 +44,9 @@ You could find some trained models I have trained in [link](https://drive.google
 
 I run experiments in 2 machines, one with NVIDIA TITAN X 12gb GPU and the other with NVIDIA quadro 6000 24gb GPU. For small and large models, you need about 1.6 gb GPU and 3.5 gb GPU respectively.
 
-Results for test set are presented as follows:  A(B)/C:
+Results for test set are presented as follows:  A(B):
 - **A** is accuracy reproduced here.
 - **B** is accuracy reported in the paper.
-- **C** is the epoch when maximum accuracy observed
 
 It should be noted that in experiments with depth is 49 layers, there is no accuracy reported in the paper. Therefore here I only show the results obtained from my experiments.
 
