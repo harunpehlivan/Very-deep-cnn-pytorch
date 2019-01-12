@@ -66,30 +66,30 @@ Below are the training/test loss/accuracy curves for each dataset's experiments 
 
 - **ag_news**
 
-<img src="visualization/vdcnn_9_dbpedia.png" width="280"> <img src="visualization/vdcnn_17_dbpedia.png" width="280"> <img src="visualization/vdcnn_29_dbpedia.png" width="280"> 
+<img src="visualization/vdcnn_9_agnews.png" width="280"> <img src="visualization/vdcnn_17_agnews.png" width="280"> <img src="visualization/vdcnn_29_agnews.png" width="280"> 
 
 - **db_pedia**
 
-<img src="visualization/char-cnn_small_dbpedia.png" width="420"> <img src="visualization/char-cnn_large_dbpedia.png" width="420">
+<img src="visualization/vdcnn_9_dbpedia.png" width="280"> <img src="visualization/vdcnn_17_dbpedia.png" width="280"> <img src="visualization/vdcnn_29_dbpedia.png" width="280">
 
 - **yelp_polarity**
 
-<img src="visualization/char-cnn_small_yelp_review_polarity.png" width="420"> <img src="visualization/char-cnn_large_yelp_review_polarity.png" width="420">
+<img src="visualization/vdcnn_9_yelp_review_polarity.png" width="280"> <img src="visualization/vdcnn_17_yelp_review_polarity.png" width="280"> <img src="visualization/vdcnn_29_yelp_review_polarity.png" width="280">
 
 - **yelp_review**
 
-<img src="visualization/char-cnn_small_yelp_review.png" width="420"> <img src="visualization/char-cnn_large_yelp_review.png" width="420">
+<img src="visualization/vdcnn_9_yelp_review.png" width="280"> <img src="visualization/vdcnn_17_yelp_review.png" width="280"> <img src="visualization/vdcnn_29_yelp_review.png" width="280">
 
 - **yahoo! answers**
 
-<img src="visualization/char-cnn_small_yahoo_answers.png" width="420"> <img src="visualization/char-cnn_large_yahoo_answers.png" width="420">
+<img src="visualization/vdcnn_9_yahoo_answers.png" width="280"> <img src="visualization/vdcnn_17_yahoo_answers.png" width="280"> <img src="visualization/vdcnn_29_yahoo_answers.png" width="280">
 
 - **amazon_review**
 
-<img src="visualization/char-cnn_small_amazon_review.png" width="420"> <img src="visualization/char-cnn_large_amazon_review.png" width="420">
+<img src="visualization/vdcnn_9_amazon_review.png" width="280"> <img src="visualization/vdcnn_17_amazon_review.png" width="280"> <img src="visualization/vdcnn_29_amazon_review.png" width="280">
 
 - **amazon_polarity**
 
-<img src="visualization/char-cnn_small_amazon_polarity.png" width="420"> <img src="visualization/char-cnn_large_amazon_polarity.png" width="420">
+<img src="visualization/vdcnn_9_amazon_polarity.png" width="280"> <img src="visualization/vdcnn_17_amazon_polarity.png" width="280"> <img src="visualization/vdcnn_29_amazon_polarity.png" width="280">
 
 You could find detail log of each experiment containing loss, accuracy and confusion matrix at the end of each epoch in **output/datasetname_depth_number/logs.txt**, for example output/ag_news_depth_29/logs.txt
