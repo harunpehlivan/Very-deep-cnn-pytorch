@@ -62,4 +62,34 @@ It should be noted that in experiments with depth is 49 layers, there is no accu
 | amazon_review | 60.34(60.81)/12 | 60.98(61.19)/20 | 60.67(61.61)/20 |    59.80/17     |
 |amazon_polarity| 94.30(94.31)/15 | 94.60(94.57)/17 | 94.53(95.06)/20 |    94.10/11     |
 
+Below are the training/test loss/accuracy curves for each dataset's experiments (figures for 9, 17, 29-layer model are from left to right) :
+
+- **ag_news**
+
+<img src="visualization/vdcnn_9_dbpedia.png" width="280"> <img src="visualization/vdcnn_17_dbpedia.png" width="280"> <img src="visualization/vdcnn_29_dbpedia.png" width="280"> 
+
+- **db_pedia**
+
+<img src="visualization/char-cnn_small_dbpedia.png" width="420"> <img src="visualization/char-cnn_large_dbpedia.png" width="420">
+
+- **yelp_polarity**
+
+<img src="visualization/char-cnn_small_yelp_review_polarity.png" width="420"> <img src="visualization/char-cnn_large_yelp_review_polarity.png" width="420">
+
+- **yelp_review**
+
+<img src="visualization/char-cnn_small_yelp_review.png" width="420"> <img src="visualization/char-cnn_large_yelp_review.png" width="420">
+
+- **yahoo! answers**
+
+<img src="visualization/char-cnn_small_yahoo_answers.png" width="420"> <img src="visualization/char-cnn_large_yahoo_answers.png" width="420">
+
+- **amazon_review**
+
+<img src="visualization/char-cnn_small_amazon_review.png" width="420"> <img src="visualization/char-cnn_large_amazon_review.png" width="420">
+
+- **amazon_polarity**
+
+<img src="visualization/char-cnn_small_amazon_polarity.png" width="420"> <img src="visualization/char-cnn_large_amazon_polarity.png" width="420">
+
 You could find detail log of each experiment containing loss, accuracy and confusion matrix at the end of each epoch in **output/datasetname_depth_number/logs.txt**, for example output/ag_news_depth_29/logs.txt
