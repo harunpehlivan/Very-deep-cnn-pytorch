@@ -11,7 +11,7 @@ csv.field_size_limit(sys.maxsize)
 
 
 class MyDataset(Dataset):
-    def __init__(self, data_path, class_path=None, max_length=1014):
+    def __init__(self, data_path, max_length=1014):
         self.data_path = data_path
         self.vocabulary = list("""abcdefghijklmnopqrstuvwxyz0123456789,;.!?:'\"/\\|_@#$%^&*~`+-=<>()[]{}""")
         texts, labels = [], []
@@ -29,8 +29,7 @@ class MyDataset(Dataset):
         self.labels = labels
         self.max_length = max_length
         self.length = len(self.labels)
-        if class_path:
-            self.num_classes = sum(1 for _ in open(class_path))
+        self.num_classes = len(set(self.labels))
 
     def __len__(self):
         return self.length

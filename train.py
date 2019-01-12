@@ -6,9 +6,9 @@ import os
 import argparse
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from torch.utils.data import DataLoader
-from torch.autograd import Variable
+from tensorboardX import SummaryWriter
+import shutil
 
 from src.utils import *
 from src.dataset import MyDataset
@@ -21,25 +21,33 @@ def get_args():
     parser.add_argument("-a", "--alphabet", type=str,
                         default="""abcdefghijklmnopqrstuvwxyz0123456789,;.!?:'\"/\\|_@#$%^&*~`+-=<>()[]{}""")
     parser.add_argument("-t", "--depth", type=int, choices=[9, 17, 29, 49], default=29, help="Depth of the network")
-    parser.add_argument("-m", "--max_length", type=int, default=1014)
+    parser.add_argument("-m", "--max_length", type=int, default=1024)
     parser.add_argument("-s", "--shortcut", action='store_true', default=False)
     parser.add_argument("-p", "--optimizer", type=str, choices=["sgd", "adam"], default="adam")
     parser.add_argument("-b", "--batch_size", type=int, default=128)
     parser.add_argument("-n", "--num_epochs", type=int, default=20)
     parser.add_argument("-l", "--lr", type=float,
                         default=0.001)  # recommended learning rate for sgd is 0.01, while for adam is 0.001
-    parser.add_argument("-g", "--gpu", action="store_true", default=True)
     parser.add_argument("-d", "--dataset", type=str,
                         choices=["agnews", "dbpedia", "yelp_review", "yelp_review_polarity", "amazon_review",
-                                 "amazon_polarity", "sogou_news", "yahoo_answers"], default="",
+                                 "amazon_polarity", "sogou_news", "yahoo_answers"], default="agnews",
                         help="public dataset used for experiment. If this parameter is set, parameters input and output are ignored")
+    parser.add_argument("-y", "--es_min_delta", type=float, default=0.0,
+                        help="Early stopping's parameter: minimum change loss to qualify as an improvement")
+    parser.add_argument("-w", "--es_patience", type=int, default=3,
+                        help="Early stopping's parameter: number of epochs with no improvement after which training will be stopped. Set to 0 to disable this technique.")
     parser.add_argument("-i", "--input", type=str, default="input", help="path to input folder")
     parser.add_argument("-o", "--output", type=str, default="output", help="path to output folder")
+    parser.add_argument("-v", "--log_path", type=str, default="tensorboard/vdcnn")
     args = parser.parse_args()
     return args
 
 
 def train(opt):
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed(123)
+    else:
+        torch.manual_seed(123)
     if opt.dataset in ["agnews", "dbpedia", "yelp_review", "yelp_review_polarity", "amazon_review",
                        "amazon_polarity", "sogou_news", "yahoo_answers"]:
         opt.input, opt.output = get_default_folder(opt.dataset, opt.depth)
@@ -47,7 +55,7 @@ def train(opt):
     if not os.path.exists(opt.output):
         os.makedirs(opt.output)
     output_file = open(opt.output + os.sep + "logs.txt", "w")
-    output_file.write("Model's parameters: {}".format(vars(opt)))
+    output_file.write("Model's parameters: {}\n\n".format(vars(opt)))
 
     training_params = {"batch_size": opt.batch_size,
                        "shuffle": True,
@@ -55,15 +63,21 @@ def train(opt):
     test_params = {"batch_size": opt.batch_size,
                    "shuffle": False,
                    "num_workers": 0}
-    training_set = MyDataset(opt.input + os.sep + "train.csv", opt.input + os.sep + "classes.txt", opt.max_length)
-    test_set = MyDataset(opt.input + os.sep + "test.csv", opt.input + os.sep + "classes.txt", opt.max_length)
+    training_set = MyDataset(opt.input + os.sep + "train.csv",opt.max_length)
+    test_set = MyDataset(opt.input + os.sep + "test.csv", opt.max_length)
     training_generator = DataLoader(training_set, **training_params)
     test_generator = DataLoader(test_set, **test_params)
 
-    model = VDCNN(n_classes=training_set.num_classes, num_embedding=len(opt.alphabet)+1, embedding_dim=16,
-                        depth=opt.depth, n_fc_neurons=2048, shortcut=opt.shortcut)
+    model = VDCNN(n_classes=training_set.num_classes, num_embedding=len(opt.alphabet) + 1, embedding_dim=16,
+                  depth=opt.depth, n_fc_neurons=2048, shortcut=opt.shortcut)
 
-    if opt.gpu:
+    log_path = "{}_{}_{}".format(opt.log_path, opt.depth, opt.dataset)
+    if os.path.isdir(log_path):
+        shutil.rmtree(log_path)
+    os.makedirs(log_path)
+    writer = SummaryWriter(log_path)
+
+    if torch.cuda.is_available():
         model.cuda()
 
     criterion = nn.CrossEntropyLoss()
@@ -71,75 +85,83 @@ def train(opt):
         optimizer = torch.optim.Adam(model.parameters(), lr=opt.lr)
     elif opt.optimizer == "sgd":
         optimizer = torch.optim.SGD(model.parameters(), lr=opt.lr, momentum=0.9)
+    best_loss = 1e5
+    best_epoch = 0
     model.train()
     num_iter_per_epoch = len(training_generator)
-    best_accuracy = 0
 
     for epoch in range(opt.num_epochs):
         for iter, batch in enumerate(training_generator):
-            _, n_true_label = batch
-            if opt.gpu:
-                batch = [Variable(record).cuda() for record in batch]
-            else:
-                batch = [Variable(record) for record in batch]
-            t_data, t_true_label = batch
+            feature, label = batch
+            if torch.cuda.is_available():
+                feature = feature.cuda()
+                label = label.cuda()
             optimizer.zero_grad()
-            t_predicted_label = model(t_data)
-            n_prob_label = t_predicted_label.cpu().data.numpy()
-
-            loss = criterion(t_predicted_label, t_true_label)
+            predictions = model(feature)
+            loss = criterion(predictions, label)
             loss.backward()
             optimizer.step()
 
-            training_metrics = get_evaluation(n_true_label, n_prob_label, list_metrics=["accuracy", "loss"])
-            print(
-                "Training: Iteration: {}/{} Epoch: {}/{} Loss: {} Accuracy: {}".format(iter + 1, num_iter_per_epoch,
-                                                                                       epoch + 1, opt.num_epochs,
-                                                                                       training_metrics["loss"],
-                                                                                       training_metrics[
-                                                                                           "accuracy"]))
-
+            training_metrics = get_evaluation(label.cpu().numpy(), predictions.cpu().detach().numpy(),
+                                              list_metrics=["accuracy"])
+            print("Epoch: {}/{}, Iteration: {}/{}, Lr: {}, Loss: {}, Accuracy: {}".format(
+                epoch + 1,
+                opt.num_epochs,
+                iter + 1,
+                num_iter_per_epoch,
+                optimizer.param_groups[0]['lr'],
+                loss, training_metrics["accuracy"]))
+            writer.add_scalar('Train/Loss', loss, epoch * num_iter_per_epoch + iter)
+            writer.add_scalar('Train/Accuracy', training_metrics["accuracy"], epoch * num_iter_per_epoch + iter)
         model.eval()
-        test_true = []
-        test_prob = []
+        loss_ls = []
+        te_label_ls = []
+        te_pred_ls = []
         for batch in test_generator:
-            _, n_true_label = batch
-            if opt.gpu:
-                batch = [Variable(record.long(), volatile=True).cuda() for record in batch]
-            else:
-                batch = [Variable(record.long(), volatile=True) for record in batch]
-            t_data, _ = batch
-            t_predicted_label = model(t_data)
-            t_predicted_label = F.softmax(t_predicted_label)
-            test_prob.append(t_predicted_label)
-            test_true.extend(n_true_label)
-        test_prob = torch.cat(test_prob, 0)
-        test_prob = test_prob.cpu().data.numpy()
-        test_true = np.array(test_true)
-        model.train()
+            te_feature, te_label = batch
+            num_sample = len(te_label)
+            if torch.cuda.is_available():
+                te_feature = te_feature.cuda()
+                te_label = te_label.cuda()
+            with torch.no_grad():
+                te_predictions = model(te_feature)
+            te_loss = criterion(te_predictions, te_label)
+            loss_ls.append(te_loss * num_sample)
+            te_label_ls.extend(te_label.clone().cpu())
+            te_pred_ls.append(te_predictions.clone().cpu())
 
-        test_metrics = get_evaluation(test_true, test_prob,
-                                      list_metrics=["accuracy", "loss", "confusion_matrix"])
-
+        te_loss = sum(loss_ls) / test_set.__len__()
+        te_pred = torch.cat(te_pred_ls, 0)
+        te_label = np.array(te_label_ls)
+        test_metrics = get_evaluation(te_label, te_pred.numpy(), list_metrics=["accuracy", "confusion_matrix"])
         output_file.write(
-            "Epoch: {}/{} \nTraining loss: {} Training accuracy: {} \nTest loss: {} Test accuracy: {} \nTest confusion matrix: \n{}\n\n".format(
+            "Epoch: {}/{} \nTest loss: {} Test accuracy: {} \nTest confusion matrix: \n{}\n\n".format(
                 epoch + 1, opt.num_epochs,
-                training_metrics["loss"],
-                training_metrics["accuracy"],
-                test_metrics["loss"],
+                te_loss,
                 test_metrics["accuracy"],
                 test_metrics["confusion_matrix"]))
-        print (
-            "\tTest:Epoch: {}/{} Loss: {} Accuracy: {}\r".format(epoch + 1, opt.num_epochs, test_metrics["loss"],
-                                                                 test_metrics["accuracy"]))
-        if test_metrics["accuracy"] > best_accuracy:
-            best_accuracy = test_metrics["accuracy"]
-            torch.save(model, opt.output + os.sep + "trained_model")
+        print("Epoch: {}/{}, Lr: {}, Loss: {}, Accuracy: {}".format(
+            epoch + 1,
+            opt.num_epochs,
+            optimizer.param_groups[0]['lr'],
+            te_loss, test_metrics["accuracy"]))
+        writer.add_scalar('Test/Loss', te_loss, epoch)
+        writer.add_scalar('Test/Accuracy', test_metrics["accuracy"], epoch)
+        model.train()
+        if te_loss + opt.es_min_delta < best_loss:
+            best_loss = te_loss
+            best_epoch = epoch
+            torch.save(model, "{}/vdcnn_{}_{}".format(opt.output, opt.dataset, opt.depth))
+        # Early stopping
+        if epoch - best_epoch > opt.es_patience > 0:
+            print("Stop training at epoch {}. The lowest loss achieved is {} at epoch {}".format(epoch, te_loss, best_epoch))
+            break
         if opt.optimizer == "sgd" and epoch % 3 == 0 and epoch > 0:
             current_lr = optimizer.state_dict()['param_groups'][0]['lr']
             current_lr /= 2
             for param_group in optimizer.param_groups:
                 param_group['lr'] = current_lr
+
 
 if __name__ == "__main__":
     opt = get_args()

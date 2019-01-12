@@ -3,7 +3,7 @@
 @author: Viet Nguyen <nhviet1009@gmail.com>
 """
 import torch.nn as nn
-from torch.nn.init import kaiming_normal
+from torch.nn.init import kaiming_normal_
 
 
 class ConvBlock(nn.Module):
@@ -113,7 +113,7 @@ class VDCNN(nn.Module):
     def __init_weights(self):
         for m in self.modules():
             if isinstance(m, nn.Conv1d):
-                kaiming_normal(m.weight, mode='fan_in')
+                kaiming_normal_(m.weight, mode='fan_in', nonlinearity='relu')
 
     def forward(self, input):
 
